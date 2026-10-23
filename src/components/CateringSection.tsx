@@ -1,9 +1,10 @@
 import React from 'react';
 import { CATERING_EVENTS, CLIENT_LOGOS, SITE_CONFIG } from '../data/siteData';
+import { ReservationServiceType } from '../types';
 import { ChefHat, Phone, ArrowRight } from 'lucide-react';
 
 interface CateringSectionProps {
-  onOpenBooking: () => void;
+  onOpenBooking: (service?: ReservationServiceType) => void;
 }
 
 export const CateringSection: React.FC<CateringSectionProps> = ({ onOpenBooking }) => {
@@ -13,16 +14,16 @@ export const CateringSection: React.FC<CateringSectionProps> = ({ onOpenBooking 
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-brand-600 dark:text-brand-400 mb-3">
-            <ChefHat className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-linen-100/90 dark:bg-charcoal-800 border border-linen-200 dark:border-charcoal-700 text-brass-700 dark:text-brass-400 text-xs font-medium tracking-[0.2em] uppercase mb-4 shadow-subtle">
+            <ChefHat className="w-3.5 h-3.5 text-brass-500" />
             <span>Servicio a Empresas e Instituciones</span>
           </div>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-semibold text-charcoal-950 dark:text-white tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-charcoal-950 dark:text-linen-50 tracking-tight leading-[1.12]">
             Catering & Colectividades <br />
-            <span className="italic text-brand-600 dark:text-brand-400 font-normal">para tus eventos en Murcia</span>
+            <span className="italic font-normal text-brand-700 dark:text-brand-400">para tus citas en la Región.</span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-charcoal-600 dark:text-linen-300">
-            Llevamos nuestra propuesta gastronómica a tu sede o espacio preferido: congresos, cócteles de networking, coffee breaks ejecutivos, comidas de gala y celebraciones privadas.
+          <p className="mt-4 text-base sm:text-lg text-charcoal-600 dark:text-linen-300 font-light leading-relaxed">
+            Llevamos nuestra propuesta gastronómica a tu sede o espacio preferido: congresos, cócteles de networking, coffee breaks ejecutivos, comidas de gala y recepciones oficiales.
           </p>
         </div>
 
@@ -136,32 +137,33 @@ export const CateringSection: React.FC<CateringSectionProps> = ({ onOpenBooking 
         </div>
 
         {/* Direct Quote / Catering Request Box */}
-        <div className="rounded-3xl bg-gradient-to-r from-brand-700 via-brand-600 to-terracotta-DEFAULT p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
+        <div className="rounded-[2.5rem] bg-gradient-to-br from-brand-900 via-brand-800 to-charcoal-900 p-8 sm:p-14 text-linen-50 border border-brand-700/40 shadow-premium dark:shadow-premium-dark relative overflow-hidden">
           <div className="relative z-10 max-w-2xl">
-            <span className="text-xs uppercase tracking-widest font-bold text-brand-200 block mb-2">
-              Atención Personalizada para Empresas
+            <span className="font-mono text-[10px] tracking-widest uppercase font-semibold text-brass-300 block mb-2">
+              Atención Personalizada para Empresas & Protocolo
             </span>
-            <h3 className="font-serif text-3xl sm:text-4xl font-bold mb-4">
-              ¿Organizas un evento o reunión de trabajo?
+            <h3 className="font-serif text-3xl sm:text-4xl font-normal mb-4 leading-tight">
+              ¿Organizas una convención, recepción o almuerzo de consejo?
             </h3>
-            <p className="text-brand-100 text-sm sm:text-base leading-relaxed mb-8">
-              Pídenos presupuesto sin compromiso. Adaptamos la propuesta a tus necesidades: sala privada con proyector, coffee breaks, cócteles o menús servidos.
+            <p className="text-linen-200 text-sm sm:text-base font-light leading-relaxed mb-8">
+              Pídenos una propuesta gastronómica a medida. Combinamos logística integral de sala, menús degustación o finger-food con el sello de responsabilidad social corporativa de Cáritas.
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
               <button
-                onClick={onOpenBooking}
-                className="px-7 py-3.5 rounded-full bg-white text-brand-800 hover:bg-brand-50 font-semibold text-sm shadow-md transition-all flex items-center gap-2"
+                type="button"
+                onClick={() => onOpenBooking('catering-empresa')}
+                className="px-8 py-4 rounded-full bg-white text-brand-900 hover:bg-linen-100 font-medium text-sm tracking-wide shadow-subtle transition-all flex items-center gap-2"
               >
                 <span>Solicitar Presupuesto de Catering</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 text-brand-700" />
               </button>
 
               <a
                 href={`tel:${SITE_CONFIG.phoneBooking.replace(/\s+/g, '')}`}
-                className="px-6 py-3.5 rounded-full border border-white/50 hover:bg-white/10 text-white font-medium text-sm flex items-center gap-2 transition-all"
+                className="px-7 py-4 rounded-full border border-linen-200/40 hover:bg-white/10 text-linen-100 font-medium text-sm tracking-wide flex items-center gap-2 transition-all"
               >
-                <Phone className="w-4 h-4" />
+                <Phone className="w-4 h-4 text-brass-300" />
                 <span>{SITE_CONFIG.phoneBooking}</span>
               </a>
             </div>

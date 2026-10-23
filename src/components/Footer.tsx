@@ -67,11 +67,10 @@ export const Footer: React.FC = () => {
               Restaurante
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm text-charcoal-600 dark:text-linen-300">
-              <li><a href="#menu" className="hover:text-brand-600 transition-colors">Menú Gastronómico 7 Tiempos</a></li>
-              <li><a href="#menu" className="hover:text-brand-600 transition-colors">Bono Regala Experiencias</a></li>
-              <li><a href="#espacios" className="hover:text-brand-600 transition-colors">Salón Principal</a></li>
-              <li><a href="#espacios" className="hover:text-brand-600 transition-colors">Sala Privada con Proyector</a></li>
-              <li><a href="#espacios" className="hover:text-brand-600 transition-colors">Nueva Cafetería</a></li>
+              <li><a href="#minuta" className="hover:text-brand-600 transition-colors">Minuta Gastronómica 7 Tiempos</a></li>
+              <li><a href="#protocolo" className="hover:text-brand-600 transition-colors">Liturgia de Sala & Ceremonial</a></li>
+              <li><a href="#resenas" className="hover:text-brand-600 transition-colors">Reseñas Google & Prensa</a></li>
+              <li><a href="#espacios" className="hover:text-brand-600 transition-colors">Salones & Cafetería</a></li>
             </ul>
           </div>
 

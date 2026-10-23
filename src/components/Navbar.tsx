@@ -30,12 +30,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
   }, []);
 
   const navLinks = [
-    { name: 'El Restaurante', href: '#restaurante' },
-    { name: 'Menú 7 Tiempos', href: '#menu' },
-    { name: 'Salones & Cafetería', href: '#espacios' },
+    { name: 'Credenciales', href: '#credenciales' },
+    { name: 'Minuta 7 Tiempos', href: '#minuta' },
+    { name: 'Liturgia de Sala', href: '#protocolo' },
+    { name: 'Espacios', href: '#espacios' },
     { name: 'Catering', href: '#catering' },
-    { name: 'La Escuela', href: '#escuela' },
-    { name: 'Galería', href: '#galeria' },
+    { name: 'Escuela', href: '#escuela' },
+    { name: 'Reseñas', href: '#resenas' },
     { name: 'Contacto', href: '#contacto' },
   ];
 
@@ -136,7 +137,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 rounded-lg text-charcoal-700 dark:text-linen-200 hover:bg-linen-200 dark:hover:bg-charcoal-800 focus:outline-none"
-              aria-label="Abrir menú"
+              aria-label={mobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>

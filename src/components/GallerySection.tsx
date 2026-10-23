@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GALLERY_IMAGES } from '../data/siteData';
 import { GalleryImage } from '../types';
 import { Image as ImageIcon, X, ZoomIn } from 'lucide-react';
@@ -6,6 +6,37 @@ import { Image as ImageIcon, X, ZoomIn } from 'lucide-react';
 export const GallerySection: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<'todos' | 'gastronomia' | 'cafeteria' | 'catering' | 'escuela'>('todos');
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!selectedImage) return;
+
+    previouslyFocusedElementRef.current = document.activeElement as HTMLElement;
+
+    const timer = setTimeout(() => {
+      closeButtonRef.current?.focus();
+    }, 60);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedImage(null);
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        closeButtonRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+      clearTimeout(timer);
+      previouslyFocusedElementRef.current?.focus();
+    };
+  }, [selectedImage]);
 
   const filteredImages = activeFilter === 'todos'
     ? GALLERY_IMAGES
@@ -26,13 +57,13 @@ export const GallerySection: React.FC = () => {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-brand-600 dark:text-brand-400 mb-3">
-              <ImageIcon className="w-4 h-4" />
-              <span>Galería Visual</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-linen-100/90 dark:bg-charcoal-800 border border-linen-200 dark:border-charcoal-700 text-brass-700 dark:text-brass-400 text-xs font-medium tracking-[0.2em] uppercase mb-4 shadow-subtle">
+              <ImageIcon className="w-3.5 h-3.5 text-brass-500" />
+              <span>Memoria Visual de la Casa</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-semibold text-charcoal-950 dark:text-white tracking-tight">
-              Nuestra mesa y nuestra gente <br />
-              <span className="italic text-brand-600 dark:text-brand-400 font-normal">en imágenes</span>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-charcoal-950 dark:text-linen-50 tracking-tight leading-[1.12]">
+              La vida en sala y cocina, <br />
+              <span className="italic font-normal text-brand-700 dark:text-brand-400">en imágenes sin artificio.</span>
             </h2>
           </div>
 
@@ -42,10 +73,10 @@ export const GallerySection: React.FC = () => {
               <button
                 key={f.id}
                 onClick={() => setActiveFilter(f.id as any)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all ${
+                className={`px-4 py-2 rounded-full text-xs font-medium tracking-wide uppercase transition-all ${
                   activeFilter === f.id
-                    ? 'bg-brand-600 text-white shadow-sm'
-                    : 'bg-white dark:bg-charcoal-850 text-charcoal-700 dark:text-linen-300 border border-linen-200 dark:border-charcoal-750 hover:border-brand-400'
+                    ? 'bg-brand-700 text-white shadow-subtle'
+                    : 'bg-white dark:bg-charcoal-900 text-charcoal-600 dark:text-linen-400 border border-linen-200/80 dark:border-charcoal-800 hover:border-brand-500/40'
                 }`}
               >
                 {f.label}
@@ -96,12 +127,13 @@ export const GallerySection: React.FC = () => {
           onClick={() => setSelectedImage(null)}
         >
           <div 
-            className="relative max-w-4xl w-full bg-charcoal-900 rounded-3xl overflow-hidden border border-charcoal-700 shadow-2xl"
+            role="dialog" aria-modal="true" aria-label="Fotografía ampliada" className="relative max-w-4xl w-full bg-charcoal-900 rounded-3xl overflow-hidden border border-charcoal-700 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
+              ref={closeButtonRef}
               onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-charcoal-950/80 text-white hover:bg-brand-600 transition-colors"
+              className="absolute top-4 right-4 z-10 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-charcoal-950/80 text-white hover:bg-brand-600 transition-colors"
               aria-label="Cerrar vista ampliada"
             >
               <X className="w-5 h-5" />

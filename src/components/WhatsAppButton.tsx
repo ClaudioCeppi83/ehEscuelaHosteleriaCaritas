@@ -6,7 +6,7 @@ export const WhatsAppButton: React.FC = () => {
   const [showTooltip, setShowTooltip] = useState(true);
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
+    <div className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-40 flex items-center gap-3">
       {showTooltip && (
         <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-2xl bg-white dark:bg-charcoal-900 border border-linen-200 dark:border-charcoal-750 shadow-xl text-xs text-charcoal-800 dark:text-linen-100 animate-fade-in">
           <span>¡Hola! ¿En qué podemos ayudarte hoy?</span>

@@ -9,15 +9,15 @@ export const SchoolMission: React.FC = () => {
         
         {/* Top Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-brand-600 dark:text-brand-400 mb-3">
-            <GraduationCap className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-linen-100/90 dark:bg-charcoal-800 border border-linen-200 dark:border-charcoal-700 text-brass-700 dark:text-brass-400 text-xs font-medium tracking-[0.2em] uppercase mb-4 shadow-subtle">
+            <GraduationCap className="w-3.5 h-3.5 text-brass-500" />
             <span>Formación & Empleo con Propósito</span>
           </div>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-semibold text-charcoal-950 dark:text-white tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-charcoal-950 dark:text-linen-50 tracking-tight leading-[1.12]">
             Nuestra Historia & <br />
-            <span className="italic text-brand-600 dark:text-brand-400 font-normal">Misión Social</span>
+            <span className="italic font-normal text-brand-700 dark:text-brand-400">Misión Social Cáritas.</span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-charcoal-600 dark:text-linen-300">
+          <p className="mt-4 text-base sm:text-lg text-charcoal-600 dark:text-linen-300 font-light leading-relaxed">
             Una economía al servicio de la justicia social, los derechos de las personas y el trabajo decente en la Región de Murcia.
           </p>
         </div>
@@ -27,8 +27,8 @@ export const SchoolMission: React.FC = () => {
           
           {/* Left: Cáritas Story */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="prose dark:prose-invert text-charcoal-700 dark:text-linen-300 leading-relaxed text-base space-y-4">
-              <p className="text-lg font-serif font-medium text-charcoal-900 dark:text-white">
+            <div className="prose dark:prose-invert text-charcoal-700 dark:text-linen-300 leading-relaxed text-base space-y-4 font-light">
+              <p className="text-lg font-serif font-medium text-charcoal-900 dark:text-linen-100">
                 Cáritas entiende la <strong>Economía Solidaria</strong> como la construcción de un modelo económico diferente y alternativo al sistema vigente.
               </p>
               <p>
@@ -43,28 +43,28 @@ export const SchoolMission: React.FC = () => {
             </div>
 
             {/* Training Contact Box */}
-            <div className="p-6 rounded-2xl bg-linen-50 dark:bg-charcoal-850 border border-linen-200 dark:border-charcoal-750 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-6 rounded-3xl bg-linen-50/70 dark:bg-charcoal-850/60 border border-linen-200/80 dark:border-charcoal-750 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-subtle">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 block">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-brass-700 dark:text-brass-400 block font-semibold">
                   Información para Cursos y Formación
                 </span>
-                <span className="text-sm font-semibold text-charcoal-900 dark:text-white block mt-0.5">
-                  ¿Quieres formarte con nosotros?
+                <span className="font-serif text-base font-medium text-charcoal-900 dark:text-linen-100 block mt-0.5">
+                  ¿Quieres formarte en nuestro centro?
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <a
                   href={`mailto:${SITE_CONFIG.emailInfo}`}
-                  className="px-4 py-2 rounded-xl bg-white dark:bg-charcoal-700 border border-linen-300 dark:border-charcoal-600 text-xs font-semibold text-charcoal-800 dark:text-linen-100 flex items-center gap-1.5 hover:bg-linen-100 transition-colors"
+                  className="px-4 py-2.5 rounded-full bg-white dark:bg-charcoal-700 border border-linen-300 dark:border-charcoal-600 text-xs font-medium text-charcoal-800 dark:text-linen-100 flex items-center gap-1.5 hover:bg-linen-100 transition-colors shadow-subtle"
                 >
-                  <Mail className="w-3.5 h-3.5 text-brand-600" />
+                  <Mail className="w-3.5 h-3.5 text-brand-700 dark:text-brand-400" />
                   <span>{SITE_CONFIG.emailInfo}</span>
                 </a>
                 <a
                   href={`tel:${SITE_CONFIG.phoneTraining.replace(/\s+/g, '')}`}
-                  className="px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-semibold flex items-center gap-1.5 hover:bg-brand-700 transition-colors"
+                  className="px-4 py-2.5 rounded-full bg-brand-700 text-white text-xs font-medium flex items-center gap-1.5 hover:bg-brand-800 transition-colors shadow-subtle"
                 >
-                  <Phone className="w-3.5 h-3.5" />
+                  <Phone className="w-3.5 h-3.5 text-brass-200" />
                   <span>{SITE_CONFIG.phoneTraining}</span>
                 </a>
               </div>
@@ -75,22 +75,22 @@ export const SchoolMission: React.FC = () => {
           <div className="lg:col-span-6 space-y-8">
             
             {/* Quote Card */}
-            <div className="relative p-8 sm:p-10 rounded-3xl bg-linen-100/80 dark:bg-charcoal-950 border border-linen-200 dark:border-charcoal-800 shadow-xl">
-              <Quote className="w-12 h-12 text-brand-600/30 dark:text-brand-400/20 absolute top-6 right-6" />
+            <div className="relative p-8 sm:p-10 rounded-[2.5rem] bg-linen-100/70 dark:bg-charcoal-950 border border-linen-200/80 dark:border-charcoal-800 shadow-premium dark:shadow-premium-dark">
+              <Quote className="w-12 h-12 text-brass-500/20 absolute top-6 right-6" />
               
-              <blockquote className="font-serif text-lg sm:text-xl text-charcoal-900 dark:text-white italic leading-relaxed mb-6 relative z-10">
+              <blockquote className="font-serif text-lg sm:text-xl text-charcoal-900 dark:text-linen-100 italic leading-relaxed mb-6 relative z-10 font-normal">
                 «Este proyecto va en beneficio de aquellos que están viviendo una experiencia dramática. Ayudemos para que abran los ojos y vean que delante de ellos hay futuro y esperanza. Con esto, a mí me bastaría.»
               </blockquote>
 
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-brand-600 text-white font-serif font-bold text-lg flex items-center justify-center shadow-md">
+                <div className="w-12 h-12 rounded-full bg-brand-700 text-white font-serif font-medium text-base flex items-center justify-center shadow-subtle">
                   JML
                 </div>
                 <div>
-                  <h4 className="font-serif font-bold text-base text-charcoal-950 dark:text-white">
+                  <h3 className="font-serif font-medium text-base text-charcoal-950 dark:text-linen-50">
                     D. José Manuel Lorca Planes
-                  </h4>
-                  <p className="text-xs text-charcoal-500 dark:text-linen-400">
+                  </h3>
+                  <p className="text-xs text-charcoal-500 dark:text-linen-400 font-light">
                     Obispo de la Diócesis de Cartagena en Murcia
                   </p>
                 </div>
@@ -99,18 +99,22 @@ export const SchoolMission: React.FC = () => {
 
             {/* Photo Collage */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-2xl overflow-hidden shadow-md border-2 border-white dark:border-charcoal-800">
+              <div className="p-2 bg-linen-100/80 dark:bg-charcoal-850 rounded-2xl border border-linen-200 dark:border-charcoal-800 shadow-subtle">
                 <img
                   src={SITE_CONFIG.images.teachers}
                   alt="Equipo docente y formadores de eh! Escuela de Hostelería"
-                  className="w-full h-44 object-cover hover:scale-105 transition-transform duration-500"
+                  width={300}
+                  height={180}
+                  className="w-full h-44 object-cover rounded-xl hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="rounded-2xl overflow-hidden shadow-md border-2 border-white dark:border-charcoal-800">
+              <div className="p-2 bg-linen-100/80 dark:bg-charcoal-850 rounded-2xl border border-linen-200 dark:border-charcoal-800 shadow-subtle">
                 <img
                   src={SITE_CONFIG.images.studentsCooking}
                   alt="Alumnos de cocina en formación práctica real"
-                  className="w-full h-44 object-cover hover:scale-105 transition-transform duration-500"
+                  width={300}
+                  height={180}
+                  className="w-full h-44 object-cover rounded-xl hover:scale-105 transition-transform duration-500"
                 />
               </div>
             </div>

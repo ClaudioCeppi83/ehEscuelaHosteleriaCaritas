@@ -1,250 +1,403 @@
 import React, { useState } from 'react';
-import { GASTRONOMIC_MENU, SITE_CONFIG } from '../data/siteData';
-import { Utensils, Sparkles, Gift, Clock, Phone, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { GASTRONOMIC_COURSES, SITE_CONFIG } from '../data/siteData';
+import { ReservationServiceType, GastronomicCourse } from '../types';
+import { Wine, UtensilsCrossed, Gift, Clock, Phone, ChevronRight, Check, MapPin, Sparkles } from 'lucide-react';
 
 interface GastronomicMenuProps {
-  onOpenBooking: () => void;
+  onOpenBooking: (service?: ReservationServiceType) => void;
 }
 
 export const GastronomicMenu: React.FC<GastronomicMenuProps> = ({ onOpenBooking }) => {
-  const [activeTab, setActiveTab] = useState<'menu' | 'experiencia'>('menu');
+  const [activeTab, setActiveTab] = useState<'minuta' | 'bono'>('minuta');
+  const [expandedIngredients, setExpandedIngredients] = useState<{ [key: string]: boolean }>({});
+
+  const toggleIngredients = (courseId: string) => {
+    setExpandedIngredients((prev) => ({
+      ...prev,
+      [courseId]: !prev[courseId],
+    }));
+  };
 
   return (
-    <section id="menu" className="py-24 bg-linen-50 dark:bg-charcoal-950 transition-colors relative">
+    <section 
+      id="minuta" 
+      className="py-24 sm:py-28 bg-linen-50 dark:bg-charcoal-950 transition-colors relative"
+    >
+      {/* Anchor retroactivo para enlaces a #menu */}
+      <span id="menu" className="sr-only" aria-hidden="true" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        {/* Cabecera Editorial & Conmutador de Pestañas */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8 pb-8 border-b border-linen-200/80 dark:border-charcoal-800/80">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-brand-600 dark:text-brand-400 mb-3">
-              <Utensils className="w-4 h-4" />
-              <span>Experiencia Culinaria Exclusiva</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-linen-100/90 dark:bg-charcoal-900 border border-linen-200 dark:border-charcoal-800 text-brass-700 dark:text-brass-400 text-xs font-medium tracking-[0.2em] uppercase mb-4 shadow-subtle">
+              <Sparkles className="w-3.5 h-3.5 text-brass-500" />
+              <span>Minuta Degustación Estacional</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-semibold text-charcoal-950 dark:text-white tracking-tight">
-              Menú Gastronómico <br />
-              <span className="italic text-brand-600 dark:text-brand-400 font-normal">de siete tiempos</span>
+            
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-charcoal-950 dark:text-linen-50 tracking-tight leading-[1.12]">
+              El recetario de la huerta y el mar, <br />
+              <span className="italic font-normal text-brand-700 dark:text-brand-400">en siete pases de autor.</span>
             </h2>
-            <p className="mt-4 text-base sm:text-lg text-charcoal-700 dark:text-linen-300">
-              Cada pase representa semanas de formación, técnica rigurosa y pasión por el producto de proximidad de la Región de Murcia.
+
+            <p className="mt-4 text-base sm:text-lg text-charcoal-600 dark:text-linen-300 font-light leading-relaxed">
+              Diseñado por el claustro docente y ejecutado en vivo por los alumnos de cocina y sala. Una cadencia pausada que armoniza el producto autóctono con los vinos de las tres Denominaciones de Origen de la Región.
             </p>
+
+            {/* Cartela de Precio Distinguida (Sin estridencias de SaaS) */}
+            <div className="mt-6 flex flex-wrap items-center gap-4 pt-4 border-t border-linen-200/60 dark:border-charcoal-800/60">
+              <div className="flex items-baseline gap-2">
+                <span className="font-serif text-3xl sm:text-4xl font-normal text-charcoal-950 dark:text-linen-50">
+                  32 €
+                </span>
+                <span className="text-xs uppercase tracking-wider text-charcoal-500 dark:text-linen-400 font-medium">
+                  por comensal · IVA incluido
+                </span>
+              </div>
+              <span className="hidden sm:inline-block text-charcoal-300 dark:text-charcoal-700">|</span>
+              <span className="text-xs text-charcoal-600 dark:text-linen-300 font-light">
+                Incluye pan artesano de masa madre y prepostre cítrico · Opción maridaje D.O.P.
+              </span>
+            </div>
           </div>
 
-          {/* Quick Tab Switcher */}
-          <div className="flex items-center p-1.5 rounded-full bg-linen-200/80 dark:bg-charcoal-900 border border-linen-300 dark:border-charcoal-800 self-start md:self-end">
+          {/* Conmutador Editorial de Pestañas */}
+          <div
+            role="tablist"
+            aria-label="Modalidades gastronómicas"
+            className="inline-flex items-center p-1 rounded-full bg-linen-200/70 dark:bg-charcoal-900 border border-linen-300/70 dark:border-charcoal-800 self-start lg:self-end shadow-subtle"
+          >
             <button
-              onClick={() => setActiveTab('menu')}
-              className={`px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all ${
-                activeTab === 'menu'
-                  ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-charcoal-700 dark:text-linen-300 hover:text-brand-600 dark:hover:text-brand-400'
+              type="button"
+              role="tab"
+              id="tab-minuta"
+              aria-selected={activeTab === 'minuta'}
+              aria-controls="panel-minuta"
+              onClick={() => setActiveTab('minuta')}
+              className={`px-5 py-2.5 rounded-full text-xs font-medium tracking-wider uppercase transition-all duration-300 ${
+                activeTab === 'minuta'
+                  ? 'bg-brand-700 text-white shadow-subtle'
+                  : 'text-charcoal-700 dark:text-linen-300 hover:text-brand-700 dark:hover:text-brand-400'
               }`}
             >
-              Los 7 Pases Culinarios
+              Minuta 7 Tiempos
             </button>
             <button
-              onClick={() => setActiveTab('experiencia')}
-              className={`px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 ${
-                activeTab === 'experiencia'
-                  ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-charcoal-700 dark:text-linen-300 hover:text-brand-600 dark:hover:text-brand-400'
+              type="button"
+              role="tab"
+              id="tab-bono"
+              aria-selected={activeTab === 'bono'}
+              aria-controls="panel-bono"
+              onClick={() => setActiveTab('bono')}
+              className={`px-5 py-2.5 rounded-full text-xs font-medium tracking-wider uppercase transition-all duration-300 flex items-center gap-2 ${
+                activeTab === 'bono'
+                  ? 'bg-brand-700 text-white shadow-subtle'
+                  : 'text-charcoal-700 dark:text-linen-300 hover:text-brand-700 dark:hover:text-brand-400'
               }`}
             >
               <Gift className="w-3.5 h-3.5" />
-              <span>Regala Experiencias</span>
+              <span>Regala la Experiencia</span>
             </button>
           </div>
         </div>
 
-        {/* Tab 1: The 7-Course Menu */}
-        {activeTab === 'menu' && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start animate-fade-in">
+        {/* Pestaña 1: Los 7 Pases de la Minuta Gastronómica */}
+        {activeTab === 'minuta' && (
+          <div
+            id="panel-minuta"
+            role="tabpanel"
+            aria-labelledby="tab-minuta"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start"
+          >
             
-            {/* Courses Timeline List */}
+            {/* Listado Editorial de los 7 Pases */}
             <div className="lg:col-span-8 space-y-6">
-              {GASTRONOMIC_MENU.map((item) => (
-                <div
-                  key={item.id}
-                  className="p-6 rounded-2xl bg-white dark:bg-charcoal-900 border border-linen-200 dark:border-charcoal-800 hover:border-brand-300 dark:hover:border-brand-700/60 shadow-sm hover:shadow-md transition-all duration-300 group"
+              {GASTRONOMIC_COURSES.map((course: GastronomicCourse) => (
+                <article
+                  key={course.id}
+                  className="p-7 sm:p-8 rounded-3xl bg-white dark:bg-charcoal-900 border border-linen-200/80 dark:border-charcoal-800/80 hover:border-brand-500/30 dark:hover:border-brand-500/30 transition-all duration-300 shadow-subtle group"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-2">
-                    <div className="flex items-center gap-3">
-                      <span className="w-7 h-7 rounded-full bg-brand-50 dark:bg-brand-950/80 text-brand-600 dark:text-brand-400 font-serif font-bold text-xs flex items-center justify-center border border-brand-200 dark:border-brand-800">
-                        0{item.id}
+                  {/* Encabezado del Pase: Número, Procedencia y Dietética */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-2.5">
+                      <span className="font-mono text-xs font-bold tracking-widest text-brass-700 dark:text-brass-400 bg-brass-500/10 dark:bg-brass-500/15 px-3 py-1 rounded-full uppercase">
+                        Pase {course.courseNumber}
                       </span>
-                      <span className="text-xs font-semibold uppercase tracking-wider text-charcoal-500 dark:text-linen-400">
-                        {item.course}
-                      </span>
+                      {course.provenance && (
+                        <span className="inline-flex items-center gap-1 text-[11px] text-charcoal-500 dark:text-linen-400 font-light">
+                          <MapPin className="w-3 h-3 text-brass-500" />
+                          {course.provenance}
+                        </span>
+                      )}
                     </div>
 
-                    {item.dietary && (
-                      <div className="flex gap-1.5">
-                        {item.dietary.map((diet) => (
+                    {/* Notas Dietéticas */}
+                    {course.dietaryNotes && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {course.dietaryNotes.map((note) => (
                           <span
-                            key={diet}
-                            className="text-[10px] px-2 py-0.5 rounded-full bg-linen-100 dark:bg-charcoal-800 text-charcoal-600 dark:text-linen-300 font-medium"
+                            key={note}
+                            className="text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-linen-100 dark:bg-charcoal-800 text-charcoal-600 dark:text-linen-300 font-medium"
                           >
-                            {diet}
+                            {note}
                           </span>
                         ))}
                       </div>
                     )}
                   </div>
 
-                  <h3 className="font-serif text-lg sm:text-xl font-semibold text-charcoal-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors mb-2">
-                    {item.name}
+                  {/* Título & Sutileza Gastronómica */}
+                  <h3 className="font-serif text-xl sm:text-2xl font-normal text-charcoal-950 dark:text-linen-50 group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors mb-1">
+                    {course.title}
                   </h3>
 
-                  <p className="text-sm text-charcoal-600 dark:text-linen-300 leading-relaxed mb-3">
-                    {item.description}
+                  {course.subtitle && (
+                    <p className="font-serif italic text-xs sm:text-sm text-brass-700 dark:text-brass-400 mb-3">
+                      {course.subtitle}
+                    </p>
+                  )}
+
+                  {/* Descripción Culinaria Reposada */}
+                  <p className="text-sm sm:text-base text-charcoal-700 dark:text-linen-300 font-light leading-relaxed mb-4">
+                    {course.description}
                   </p>
 
-                  {item.highlights && (
-                    <div className="flex flex-wrap gap-2 pt-2 border-t border-linen-100 dark:border-charcoal-850">
-                      {item.highlights.map((h) => (
-                        <span
-                          key={h}
-                          className="inline-flex items-center gap-1 text-[11px] text-brand-700 dark:text-brand-300 font-medium"
-                        >
-                          <Sparkles className="w-3 h-3 text-brand-500" />
-                          {h}
-                        </span>
-                      ))}
+                  {/* Ingredientes de Proximidad (Desplegable sutil) */}
+                  <div className="pt-3 border-t border-linen-100 dark:border-charcoal-850">
+                    <button
+                      type="button"
+                      aria-expanded={Boolean(expandedIngredients[course.id])}
+                      aria-controls={`ingredients-${course.id}`}
+                      onClick={() => toggleIngredients(course.id)}
+                      className="text-xs text-charcoal-500 dark:text-linen-400 hover:text-brand-700 dark:hover:text-brand-400 inline-flex items-center gap-1.5 font-medium transition-colors"
+                    >
+                      <span>
+                        {expandedIngredients[course.id]
+                          ? 'Ocultar ingredientes del pase'
+                          : 'Ver ingredientes y procedencia de huerta'}
+                      </span>
+                      <ChevronRight
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          expandedIngredients[course.id] ? 'rotate-90' : ''
+                        }`}
+                      />
+                    </button>
+
+                    {expandedIngredients[course.id] && (
+                      <ul
+                        id={`ingredients-${course.id}`}
+                        className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-charcoal-600 dark:text-linen-300 font-light bg-linen-50/70 dark:bg-charcoal-850/60 p-3.5 rounded-2xl animate-fade-in"
+                      >
+                        {course.ingredients.map((ingredient, i) => (
+                          <li key={i} className="flex items-center gap-2">
+                            <span className="w-1 h-1 rounded-full bg-brass-500" />
+                            <span>{ingredient}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  {/* Bloque Refinado de Maridaje D.O.P. */}
+                  {course.pairing && (
+                    <div className="mt-4 p-4 rounded-2xl bg-linen-100/60 dark:bg-charcoal-850/70 border border-linen-200/70 dark:border-charcoal-800/80">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-brand-50 dark:bg-brand-950/70 flex items-center justify-center text-brand-700 dark:text-brand-400 shrink-0 mt-0.5">
+                          <Wine className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex flex-wrap items-center justify-between gap-1 mb-1">
+                            <h4 className="font-serif text-sm font-medium text-charcoal-900 dark:text-linen-100">
+                              {course.pairing.wine}
+                            </h4>
+                            <span className="text-[10px] font-mono tracking-wider uppercase font-semibold text-brass-700 dark:text-brass-400 px-2 py-0.5 rounded bg-brass-500/10 dark:bg-brass-500/20">
+                              {course.pairing.denomination}
+                            </span>
+                          </div>
+                          {course.pairing.notes && (
+                            <p className="text-xs text-charcoal-600 dark:text-linen-300 font-light leading-relaxed italic">
+                              «{course.pairing.notes}»
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   )}
-                </div>
+
+                </article>
               ))}
             </div>
 
-            {/* Sidebar / Info Column */}
-            <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-28">
+            {/* Columna Lateral Fija: Condiciones de Servicio & Reserva */}
+            <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-28">
               
-              {/* Schedule & Info Box */}
-              <div className="p-7 rounded-3xl bg-white dark:bg-charcoal-900 border border-linen-200 dark:border-charcoal-800 shadow-premium dark:shadow-premium-dark">
-                <span className="text-xs uppercase tracking-widest font-bold text-brand-600 dark:text-brand-400 block mb-2">
-                  Información del Servicio
+              {/* Tarjeta de Servicio & Protocolo de Asistencia */}
+              <div className="p-7 sm:p-8 rounded-3xl bg-white dark:bg-charcoal-900 border border-linen-200/80 dark:border-charcoal-800/80 shadow-premium dark:shadow-premium-dark">
+                <span className="font-mono text-xs tracking-widest uppercase font-semibold text-brass-700 dark:text-brass-400 block mb-2">
+                  Protocolo del Comensal
                 </span>
-                <h4 className="font-serif text-2xl font-bold text-charcoal-950 dark:text-white mb-4">
-                  Horario de Restaurante
-                </h4>
+                <h3 className="font-serif text-2xl font-normal text-charcoal-950 dark:text-linen-50 mb-4">
+                  Horario & Condiciones
+                </h3>
 
-                <div className="space-y-3.5 text-sm text-charcoal-700 dark:text-linen-300 mb-6">
+                {/* Síntesis de Precio */}
+                <div className="p-4 rounded-2xl bg-linen-50 dark:bg-charcoal-850 border border-linen-200/70 dark:border-charcoal-800 mb-6 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-mono tracking-wider uppercase text-charcoal-500 dark:text-linen-400 block">
+                      Minuta Degustación
+                    </span>
+                    <span className="font-serif text-2xl font-normal text-charcoal-950 dark:text-linen-50">
+                      32 € <span className="font-sans text-xs text-charcoal-600 dark:text-linen-300 font-light">/ pax</span>
+                    </span>
+                  </div>
+                  <span className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-full bg-brand-700 text-white">
+                    IVA Incluido
+                  </span>
+                </div>
+
+                {/* Detalles de Servicio */}
+                <div className="space-y-4 text-xs sm:text-sm text-charcoal-700 dark:text-linen-300 font-light mb-8">
                   <div className="flex items-start gap-3">
-                    <Clock className="w-4 h-4 text-brand-600 dark:text-brand-400 shrink-0 mt-0.5" />
+                    <Clock className="w-4 h-4 text-brand-700 dark:text-brand-400 shrink-0 mt-0.5" />
                     <div>
-                      <strong className="block text-charcoal-900 dark:text-white">Lunes a Viernes</strong>
-                      <span>Servicio de comidas: 13:30h a 17:30h</span>
+                      <strong className="block text-charcoal-950 dark:text-linen-50 font-medium">De Lunes a Viernes</strong>
+                      <span>Pase único de almuerzo: 13:30h a 17:30h</span>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <Phone className="w-4 h-4 text-brand-600 dark:text-brand-400 shrink-0 mt-0.5" />
+                    <Phone className="w-4 h-4 text-brand-700 dark:text-brand-400 shrink-0 mt-0.5" />
                     <div>
-                      <strong className="block text-charcoal-900 dark:text-white">Reservas telefónicas</strong>
+                      <strong className="block text-charcoal-950 dark:text-linen-50 font-medium">Atención de Maître</strong>
                       <span>{SITE_CONFIG.phoneBooking}</span>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                    <Check className="w-4 h-4 text-brass-600 dark:text-brass-400 shrink-0 mt-0.5" />
                     <div>
-                      <strong className="block text-charcoal-900 dark:text-white">Reserva para Grupos</strong>
-                      <span>Salón para eventos o sala privada con proyector.</span>
+                      <strong className="block text-charcoal-950 dark:text-linen-50 font-medium">Adaptación de Alérgenos</strong>
+                      <span>Indicar al reservar: carta adaptada a celiaquía e intolerancias.</span>
                     </div>
                   </div>
                 </div>
 
+                {/* Acciones de Reserva */}
                 <div className="space-y-3">
                   <button
-                    onClick={onOpenBooking}
-                    className="w-full py-3.5 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2"
+                    type="button"
+                    onClick={() => onOpenBooking('menu-7-tiempos')}
+                    className="w-full py-4 px-6 rounded-full bg-brand-700 hover:bg-brand-800 active:bg-brand-900 text-white font-medium text-sm tracking-wide shadow-subtle transition-all flex items-center justify-center gap-2"
                   >
+                    <UtensilsCrossed className="w-4 h-4 text-brass-200" />
                     <span>Reservar Mesa Online</span>
-                    <ChevronRight className="w-4 h-4" />
                   </button>
 
                   <a
                     href={`tel:${SITE_CONFIG.phoneBooking.replace(/\s+/g, '')}`}
-                    className="w-full py-3 px-6 rounded-xl border border-charcoal-300 dark:border-charcoal-700 hover:bg-linen-100 dark:hover:bg-charcoal-800 text-charcoal-800 dark:text-linen-200 font-medium text-xs flex items-center justify-center gap-2 transition-all"
+                    className="w-full py-3.5 px-6 rounded-full border border-linen-300 dark:border-charcoal-750 hover:bg-linen-100 dark:hover:bg-charcoal-800 text-charcoal-800 dark:text-linen-200 font-medium text-xs tracking-wide flex items-center justify-center gap-2 transition-all"
                   >
-                    <Phone className="w-3.5 h-3.5 text-brand-600" />
-                    <span>Llamar para Reservar</span>
+                    <Phone className="w-3.5 h-3.5 text-brand-700 dark:text-brand-400" />
+                    <span>Llamada Directa a Sala</span>
                   </a>
                 </div>
               </div>
 
-              {/* Real Food Plate Feature Card */}
-              <div className="rounded-3xl overflow-hidden shadow-lg border border-linen-200 dark:border-charcoal-800 relative group">
+              {/* Fotografía Testimonial de la Escuela */}
+              <div className="rounded-3xl overflow-hidden shadow-subtle border border-linen-200/80 dark:border-charcoal-800/80 relative group">
                 <img
-                  src="https://ehescueladehosteleria.com/wp-content/uploads/2024/09/cropped-DSC07148-scaled-1.jpg"
-                  alt="Plato gastronómico elaborado por los alumnos"
-                  className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+                  src="/assets/photos/cropped-DSC07148-scaled-1.webp"
+                  alt="Plato culinario del restaurante escuela"
+                  width={400}
+                  height={260}
+                  className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-5 flex flex-col justify-end text-white">
-                  <span className="text-[11px] font-semibold text-brand-300 uppercase tracking-widest">
-                    Elaboración en Vivo
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/85 via-charcoal-950/30 to-transparent p-5 flex flex-col justify-end text-linen-50">
+                  <span className="text-[10px] font-mono tracking-widest text-brass-300 uppercase">
+                    Vanguardia & Oficio
                   </span>
-                  <p className="text-sm font-medium">
-                    Técnicas de vanguardia aplicadas con mimo y dedicación por nuestra cantera de profesionales.
+                  <p className="font-serif text-sm font-normal text-linen-100">
+                    El aula viva donde la técnica culinaria se traduce en inserción y dignidad.
                   </p>
                 </div>
               </div>
 
-            </div>
+            </aside>
 
           </div>
         )}
 
-        {/* Tab 2: Regala Experiencias */}
-        {activeTab === 'experiencia' && (
-          <div className="bg-white dark:bg-charcoal-900 rounded-3xl p-8 sm:p-12 border border-linen-200 dark:border-charcoal-800 shadow-premium dark:shadow-premium-dark animate-fade-in">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        {/* Pestaña 2: Regala Experiencias (Bono Culinario) */}
+        {activeTab === 'bono' && (
+          <div
+            id="panel-bono"
+            role="tabpanel"
+            aria-labelledby="tab-bono"
+            className="bg-white dark:bg-charcoal-900 rounded-[2.5rem] p-8 sm:p-14 border border-linen-200/80 dark:border-charcoal-800/80 shadow-premium dark:shadow-premium-dark animate-fade-in"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               
               <div className="lg:col-span-6">
-                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-600 dark:text-brand-400 mb-3">
-                  <Gift className="w-4 h-4" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-linen-100/90 dark:bg-charcoal-800 border border-linen-200 dark:border-charcoal-700 text-brass-700 dark:text-brass-400 text-xs font-medium tracking-[0.2em] uppercase mb-4 shadow-subtle">
+                  <Gift className="w-3.5 h-3.5 text-brass-500" />
                   <span>Bono Regalo Gastronómico</span>
                 </div>
-                <h3 className="font-serif text-3xl sm:text-4xl font-bold text-charcoal-950 dark:text-white mb-4">
-                  Regala una experiencia con propósito social
+
+                <h3 className="font-serif text-3xl sm:text-4xl font-normal text-charcoal-950 dark:text-linen-50 mb-4 leading-tight">
+                  Un obsequio memorable <br />
+                  <span className="italic text-brand-700 dark:text-brand-400 font-normal">con hondo impacto social.</span>
                 </h3>
-                <p className="text-charcoal-600 dark:text-linen-300 text-base leading-relaxed mb-6">
-                  Sorprende a tus familiares, amigos o empleados con nuestro bono de regalo de degustación gastronómica para dos personas. Un regalo inolvidable que apoya directamente la formación y empleo de jóvenes y personas en vulnerabilidad social.
+
+                <p className="text-charcoal-600 dark:text-linen-300 text-base font-light leading-relaxed mb-6">
+                  Regala a tus familiares, compromisos o colaboradores un almuerzo de siete tiempos en nuestro restaurante de alta cocina. Cada bono financia directamente el programa de becas y equipamiento para los alumnos de la Escuela de Hostelería de Cáritas.
                 </p>
 
-                <ul className="space-y-3 mb-8 text-sm text-charcoal-700 dark:text-linen-200">
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-                    <span>Menú gastronómico completo de 7 tiempos para 2 comensales</span>
+                <ul className="space-y-3.5 mb-8 text-xs sm:text-sm text-charcoal-700 dark:text-linen-200 font-light">
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-brass-500/10 dark:bg-brass-500/20 text-brass-700 dark:text-brass-400 flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5" />
+                    </span>
+                    <span>Menú gastronómico completo de 7 tiempos para dos comensales.</span>
                   </li>
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-                    <span>Maridaje seleccionado de vinos de la Región de Murcia</span>
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-brass-500/10 dark:bg-brass-500/20 text-brass-700 dark:text-brass-400 flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5" />
+                    </span>
+                    <span>Maridaje seleccionado con caldos D.O.P. Jumilla, Bullas y Yecla.</span>
                   </li>
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-                    <span>Validez durante todo el curso escolar (cita previa)</span>
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-brass-500/10 dark:bg-brass-500/20 text-brass-700 dark:text-brass-400 flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5" />
+                    </span>
+                    <span>Validez durante todo el curso escolar bajo reserva previa en sala.</span>
                   </li>
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-                    <span>Formato tarjeta regalo física o voucher digital instantáneo</span>
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-brass-500/10 dark:bg-brass-500/20 text-brass-700 dark:text-brass-400 flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5" />
+                    </span>
+                    <span>Presentación en tarjeta física en sobre de lino o bono digital para envío inmediato.</span>
                   </li>
                 </ul>
 
                 <button
-                  onClick={onOpenBooking}
-                  className="px-8 py-4 rounded-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-md transition-all inline-flex items-center gap-2"
+                  type="button"
+                  onClick={() => onOpenBooking('bono-experiencia')}
+                  className="px-8 py-4 rounded-full bg-brand-700 hover:bg-brand-800 text-white font-medium text-sm tracking-wide shadow-subtle transition-all inline-flex items-center gap-2.5"
                 >
-                  <Gift className="w-4 h-4" />
-                  <span>Solicitar Bono Regalo</span>
+                  <Gift className="w-4 h-4 text-brass-200" />
+                  <span>Solicitar Bono Regalo Online</span>
                 </button>
               </div>
 
               <div className="lg:col-span-6">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-linen-100 dark:border-charcoal-800">
+                <div className="p-3 bg-linen-100/90 dark:bg-charcoal-850 rounded-3xl border border-linen-200/90 dark:border-charcoal-800 shadow-premium">
                   <img
                     src={SITE_CONFIG.images.experienceGift}
-                    alt="Tarjeta regalo gastronómica eh! Escuela de Hostelería"
-                    className="w-full h-auto object-cover"
+                    alt="Tarjeta regalo gastronómica eh! Escuela de Hostelería Cáritas"
+                    width={640}
+                    height={480}
+                    className="w-full h-auto rounded-2xl object-cover"
                   />
                 </div>
               </div>
@@ -257,3 +410,4 @@ export const GastronomicMenu: React.FC<GastronomicMenuProps> = ({ onOpenBooking 
     </section>
   );
 };
+

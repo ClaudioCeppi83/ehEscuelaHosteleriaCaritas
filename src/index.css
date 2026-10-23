@@ -5,14 +5,21 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
   }
   
   body {
     overflow-x: hidden;
   }
+
+  /* Indicador accesible de foco visible para teclado (WCAG 2.4.7) */
+  :focus-visible {
+    outline: 2px solid #8b1e2d;
+    outline-offset: 2px;
+  }
 }
 
-/* Custom subtle scrollbar */
+/* Custom subtle scrollbar con paleta brand granate */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -20,11 +27,11 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(234, 88, 12, 0.25);
+  background: rgba(139, 30, 45, 0.3);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(234, 88, 12, 0.5);
+  background: rgba(139, 30, 45, 0.6);
 }
 
 /* Glassmorphism helpers */
